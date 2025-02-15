@@ -32,6 +32,7 @@ export const actions = {
     await db.update(profileTable).set({
       firstName: data.firstName,
       lastName: data.lastName,
+      displayName: data.firstName + ' ' + data.lastName,
       email: data.email,
     }).where(eq(profileTable.id, userProfile.id));
 

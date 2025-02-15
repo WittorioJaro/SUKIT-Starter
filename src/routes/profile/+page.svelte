@@ -13,6 +13,7 @@
 	import { toast } from 'svelte-5-french-toast';
 	import Sun from 'lucide-svelte/icons/sun';
 	import Moon from 'lucide-svelte/icons/moon';
+	import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 	import { toggleMode } from 'mode-watcher';
 	let { data }: { data: PageData } = $props();
@@ -30,6 +31,10 @@
 			email = userProfile.email;
 		}
 	});
+
+	$effect(() => {
+		console.log('Profile Picture URL:', userProfile?.profilePictureUrl);
+	});
 </script>
 
 <Button onclick={toggleMode} variant="outline" size="icon">
@@ -43,38 +48,57 @@
 </Button>
 
 {#if userProfile}
-	<Card>
-		<CardHeader>
-			<CardTitle>Profile</CardTitle>
-		</CardHeader>
-		<CardContent>
-			<form
-				method="post"
-				use:enhance={({ formData }) => {
-					formData.set('firstName', firstName);
-					formData.set('lastName', lastName);
-					return ({ result }) => {
-						if (result.type === 'success') {
-							invalidate('/profile');
-							toast.success('Profile updated successfully');
-						}
-					};
-				}}
-			>
-				<div>
-					<Label>Email:</Label>
-					<Label>{email}</Label>
+	<div class="flex min-h-screen items-center justify-center bg-background p-4">
+		<Card class="w-full max-w-lg">
+			<CardHeader>
+				<CardTitle>Profile</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<div class="flex flex-col items-center space-y-4">
+					<Avatar class="size-24">
+						<AvatarImage
+							src={userProfile?.profilePictureUrl?.replace('=s96-c', '=s192-c')}
+							alt={`${firstName} ${lastName}`}
+							referrerpolicy="no-referrer"
+							crossorigin="anonymous"
+						/>
+						<AvatarFallback class="text-lg">
+							{userProfile?.firstName?.[0] + userProfile?.lastName?.[0]}
+						</AvatarFallback>
+					</Avatar>
+					<div class="space-y-1 text-center">
+						<Label class="text-muted-foreground">Email</Label>
+						<p class="font-medium">{email}</p>
+					</div>
 				</div>
-				<div>
-					<Label>First Name</Label>
-					<Input bind:value={firstName} type="text" />
-				</div>
-				<div>
-					<Label>Last Name</Label>
-					<Input bind:value={lastName} type="text" />
-				</div>
-				<Button type="submit">Update</Button>
-			</form>
-		</CardContent>
-	</Card>
+				<form
+					class="space-y-6"
+					method="post"
+					use:enhance={({ formData }) => {
+						formData.set('firstName', firstName);
+						formData.set('lastName', lastName);
+						return ({ result }) => {
+							if (result.type === 'success') {
+								invalidate('/profile');
+								toast.success('Profile updated successfully');
+							}
+						};
+					}}
+				>
+					<div class="mt-6 grid gap-4 sm:grid-cols-2">
+						<div class="space-y-2">
+							<Label>First Name</Label>
+							<Input bind:value={firstName} type="text" />
+						</div>
+						<div class="space-y-2">
+							<Label>Last Name</Label>
+							<Input bind:value={lastName} type="text" />
+						</div>
+					</div>
+					<Button class="w-full" type="submit">Update</Button>
+				</form>
+				<Button class="mt-4 w-full" variant="outline" href="/auth/logout">Logout</Button>
+			</CardContent>
+		</Card>
+	</div>
 {/if}

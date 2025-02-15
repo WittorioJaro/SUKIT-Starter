@@ -17,11 +17,19 @@ export const getOrCreateUserProfile = async (locals: App.Locals) => {
     return curUser;
   }
 
+  // Get avatar URL from user metadata
+  const avatarUrl = user.user_metadata.avatar_url ?? user.user_metadata.picture ?? null;
+  const displayName = user.user_metadata.display_name ?? user.user_metadata.name ?? null;
+  const firstName = displayName?.split(' ')[0] ?? null;
+  const lastName = displayName?.split(' ').slice(1).join(' ') ?? null;
+
   const newProfile = await db.insert(profileTable).values({
     id: user.id,
     email: user.email ?? "",
-    firstName: user.user_metadata.first_name ?? "",
-    lastName: user.user_metadata.last_name ?? "",
+    firstName: firstName ?? "",
+    lastName: lastName ?? "",
+    displayName: displayName ?? "",
+    profilePictureUrl: avatarUrl,
   }).returning();
 
   if (!newProfile) {
@@ -29,5 +37,4 @@ export const getOrCreateUserProfile = async (locals: App.Locals) => {
   }
 
   return newProfile[0];
-    
 }
