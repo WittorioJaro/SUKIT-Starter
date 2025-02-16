@@ -9,7 +9,7 @@
 <p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
 
 {#if data.user}
-	<Button href="/auth/l">Logout</Button>
+	<Button href="/auth/logout">Logout</Button>
 {:else}
 	<Button href="/auth/login">Login</Button>
 {/if}

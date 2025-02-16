@@ -3,6 +3,7 @@ import { type Handle, redirect } from '@sveltejs/kit'
 import { sequence } from '@sveltejs/kit/hooks'
 
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
+import { checkSubscriptionAccess } from '@/auth'
 
 const supabase: Handle = async ({ event, resolve }) => {
   /**
@@ -77,5 +78,19 @@ const authGuard: Handle = async ({ event, resolve }) => {
 
   return resolve(event)
 }
+const subscriptionGuard: Handle = async ({ event, resolve }) => {
+  // Public routes that don't need subscription check
+  const publicPaths = ['/auth', '/pay', '/api/checkout', '/', '/profile'];
+  if (publicPaths.some(path => event.url.pathname.startsWith(path))) {
+    return resolve(event);
+  }
 
-export const handle: Handle = sequence(supabase, authGuard)
+  const hasAccess = await checkSubscriptionAccess(event.locals);
+  if (!hasAccess) {
+    throw redirect(303, '/pay');
+  }
+
+  return resolve(event);
+};
+
+export const handle: Handle = sequence(supabase, authGuard, subscriptionGuard)

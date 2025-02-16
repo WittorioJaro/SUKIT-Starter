@@ -38,3 +38,17 @@ export const getOrCreateUserProfile = async (locals: App.Locals) => {
 
   return newProfile[0];
 }
+
+export const checkSubscriptionAccess = async (locals: App.Locals) => {
+  const { user } = await locals.safeGetSession();
+  if (!user) return false;
+
+  const profile = await db.query.profileTable.findFirst({
+    where: eq(profileTable.id, user.id)
+  });
+
+  if (!profile) return false;
+
+  // Check if user has an active plan
+  return profile.planActive && profile.planType !== 'free';
+};
