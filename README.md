@@ -1,4 +1,4 @@
-# SUKIT - SvelteKit SaaS Starter
+# SUKIT - Supabase + SvelteKit SaaS Starter
 
 A modern, full-featured SaaS starter kit built with SvelteKit 5, TypeScript, Tailwind CSS, and Supabase.
 
@@ -47,7 +47,7 @@ pnpm install
 yarn install
 ```
 
-3. Set up environment variables
+3. Set up environment variables and constants
 
 ```bash
 cp .env.example .env
@@ -58,6 +58,10 @@ Fill in your environment variables in `.env`:
 - Supabase credentials
 - Stripe API keys
 - Other configuration values
+
+Fill in your constant variables in `lib/constants`:
+
+- Add your social links and display names to show up in emails
 
 4. Initialize local Supabase
 

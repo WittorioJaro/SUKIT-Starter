@@ -29,7 +29,7 @@ export const GET = async (event) => {
 
       if (!profile?.planActive) {
         // Redirect to payment page if no active subscription
-        throw redirect(303, '/pay');
+        throw redirect(303, '/checkout');
       }
 
       throw redirect(303, `/${next.slice(1)}`);

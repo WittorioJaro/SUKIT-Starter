@@ -10,8 +10,11 @@
 		CardTitle
 	} from '$lib/components/ui/card';
 	import Switch from '@/components/ui/switch/switch.svelte';
-
-	let isAnnual: boolean = false;
+	import { loadStripe } from '@stripe/stripe-js';
+	import { PUBLIC_STRIPE_PUBLISHABLE_KEY } from '$env/static/public';
+	let isAnnual: boolean = $state(false);
+	import { onMount } from 'svelte';
+	import { enhance } from '$app/forms';
 
 	interface Plan {
 		name: string;
@@ -62,6 +65,13 @@
 			]
 		}
 	];
+
+	let stripe: any;
+
+	onMount(async () => {
+		const stripePromise = loadStripe(PUBLIC_STRIPE_PUBLISHABLE_KEY);
+		stripe = await stripePromise;
+	});
 </script>
 
 <section class="mx-auto w-full max-w-6xl px-4 py-16">
@@ -110,7 +120,24 @@
 					</ul>
 				</CardContent>
 				<CardFooter class="mt-auto pt-4">
-					<Button variant={plan.popular ? 'default' : 'outline'} class="w-full">Get Started</Button>
+					<form
+						method="post"
+						class="w-full"
+						use:enhance={() => {
+							return async ({ result }) => {
+								console.log('result', result);
+								if (result.type === 'redirect') {
+									window.location.href = result.location;
+								}
+							};
+						}}
+					>
+						<input type="hidden" name="planName" value={plan.name} />
+						<input type="hidden" name="isAnnual" value={isAnnual} />
+						<Button variant={plan.popular ? 'default' : 'outline'} class="w-full" type="submit">
+							Get Started
+						</Button>
+					</form>
 				</CardFooter>
 			</Card>
 		{/each}
