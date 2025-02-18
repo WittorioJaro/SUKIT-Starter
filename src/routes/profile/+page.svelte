@@ -24,6 +24,34 @@
 	let lastName = $state('');
 	let email = $state('');
 
+	const handlePortalRedirect = async () => {
+		try {
+			const response = await fetch('/api/portal', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					customerId: userProfile?.customerId
+				})
+			});
+
+			const { url, error } = await response.json();
+
+			if (error) {
+				toast.error('Failed to access billing portal');
+				return;
+			}
+
+			if (url) {
+				window.location.href = url;
+			}
+		} catch (err) {
+			toast.error('Failed to access billing portal');
+			console.error('Portal redirect error:', err);
+		}
+	};
+
 	$effect(() => {
 		if (userProfile && !Array.isArray(userProfile)) {
 			firstName = userProfile.firstName;
@@ -70,6 +98,10 @@
 						<Label class="text-muted-foreground">Email</Label>
 						<p class="font-medium">{email}</p>
 					</div>
+					<div>
+						<Label class="text-muted-foreground">Plan</Label>
+						<p class="font-medium">{userProfile?.planType}</p>
+					</div>
 				</div>
 				<form
 					class="space-y-6"
@@ -97,7 +129,12 @@
 					</div>
 					<Button class="w-full" type="submit">Update</Button>
 				</form>
-				<Button class="mt-4 w-full" variant="outline" href="/auth/logout">Logout</Button>
+				{#if userProfile?.customerId}
+					<Button class="mt-4 w-full" variant="outline" onclick={handlePortalRedirect}>
+						Manage Billing
+					</Button>
+				{/if}
+				<Button class="mt-4 w-full" variant="destructive" href="/auth/logout">Logout</Button>
 			</CardContent>
 		</Card>
 	</div>

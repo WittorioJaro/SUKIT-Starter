@@ -2,7 +2,7 @@ import { BASE_URL } from "$env/static/private";
 import { SAAS_NAME, X_LINK, YOUTUBE_LINK, INSTAGRAM_LINK } from "@/constants/constants";
 
 export const purchaseConfirmationEmail = (user: any) => {
-  const name = user.firstName;
+  const name = user.displayName;
   return `
   <!DOCTYPE html>
 <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -444,7 +444,7 @@ export const purchaseConfirmationEmail = (user: any) => {
                                         <div
                                           style="font-size: 20px;line-height: 30px;text-align:left;text-align-last:left;color:#9b9b9b;letter-spacing:-0.2px;font-weight:400;font-style:normal;">
                                           <div><span
-                                              style="font-family: 'Fira Sans', Arial, Helvetica, sans-serif;line-height: 150%;">Thank you for subscribing to ${SAAS_NAME}. Your purchase has been confirmed and we're excited to have you on board. If you have any questions or need assistance, feel free to reply to this email.</span> </div>
+                                              style="font-family: 'Fira Sans', Arial, Helvetica, sans-serif;line-height: 150%;">Thank you for subscribing to ${SAAS_NAME}. Your purchase has been confirmed and I'm excited to have you on board. If you have any questions or need assistance, feel free to reply to this email.</span> </div>
                                         </div>
                                       </div>
                                     </td>
@@ -459,7 +459,7 @@ export const purchaseConfirmationEmail = (user: any) => {
                                 <!--[if mso]> <table border="0" cellpadding="0" cellspacing="0" role="presentation" align="left" style="border-collapse: separate; border-spacing: 0;"> <tr> <td valign="middle" align="center" style="border-radius: 8px; background-color: #1595e7; text-align:center; color: #ffffff; padding: 14px 15px 14px 15px; mso-padding-left-alt: 0; margin-left:15px;" bgcolor="#1595e7"> <a class="pc-font-alt" style="display: inline-block; text-decoration: none; font-family: 'Fira Sans', Arial, Helvetica, sans-serif; text-align: center;" href="https://postcards.email/" target="_blank"><span style="font-size: 16px;line-height: 24px;color:#ffffff;letter-spacing:-0.2px;font-weight:500;font-style:normal;display:inline-block;"><span style="display:inline-block;"><span style="font-family: 'Fira Sans', Arial, Helvetica, sans-serif;line-height: 150%;">Let's go!</span></span></span></a> </td> </tr> </table> <![endif]-->
                                 <!--[if !mso]><!-- --> <a
                                   style="display: inline-block; box-sizing: border-box; border-radius: 8px; background-color: #1595e7; padding: 14px 15px 14px 15px; font-family: 'Fira Sans', Arial, Helvetica, sans-serif; vertical-align: top; text-align: center; text-align-last: center; text-decoration: none; -webkit-text-size-adjust: none;"
-                                  href="${BASE_URL}" target="_blank"><span
+                                  href="${BASE_URL}/profile" target="_blank"><span
                                     style="font-size: 16px;line-height: 24px;color:#ffffff;letter-spacing:-0.2px;font-weight:500;font-style:normal;display:inline-block;"><span
                                       style="display:inline-block;"><span
                                         style="font-family: 'Fira Sans', Arial, Helvetica, sans-serif;line-height: 150%;">Manage Billing</span></span></span></a> <!--<![endif]--> </th>

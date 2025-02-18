@@ -24,7 +24,6 @@ export const actions: Actions = {
     default: async ({ locals, request, url }) => {
         const { user } = await locals.safeGetSession();
 
-        console.log('user in checkout', user);
 
         if (!user) {
             throw error(401, 'Unauthorized');
