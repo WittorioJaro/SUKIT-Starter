@@ -11,11 +11,8 @@
 	import { formData } from 'zod-form-data';
 	import { invalidate } from '$app/navigation';
 	import { toast } from 'svelte-5-french-toast';
-	import Sun from 'lucide-svelte/icons/sun';
-	import Moon from 'lucide-svelte/icons/moon';
 	import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
-	import { toggleMode } from 'mode-watcher';
 	let { data }: { data: PageData } = $props();
 
 	const { userProfile } = data;
@@ -64,16 +61,6 @@
 		console.log('Profile Picture URL:', userProfile?.profilePictureUrl);
 	});
 </script>
-
-<Button onclick={toggleMode} variant="outline" size="icon">
-	<Sun
-		class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-	/>
-	<Moon
-		class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-	/>
-	<span class="sr-only">Toggle theme</span>
-</Button>
 
 {#if userProfile}
 	<div class="flex min-h-screen items-center justify-center bg-background p-4">
